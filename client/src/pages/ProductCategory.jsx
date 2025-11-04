@@ -11,10 +11,14 @@ const ProductCategory = () => {
   const searchCategory = categories.find(
     (item) => item.path.toLowerCase() === category
   );
-  const filteredProducts =
-    products.filter((product) =>
-      product.category.toLowerCase() === category)
-    
+const filteredProducts = products.filter((product) => {
+  const cat =
+    typeof product.category === "string"
+      ? product.category
+      : product.category?.path || product.category?.[0];
+  return cat?.toLowerCase() === category;
+});
+
   return (
     <div className="mt-16">
       {searchCategory && (

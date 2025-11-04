@@ -162,7 +162,8 @@ export const stripeWebhooks = async (req, res) => {
 // Get Orders by User ID: /api/order/user
 export const getUserOrders = async (req, res) => {
   try {
-    const { userId } = req.body;  // Or you might want to extract userId from req.user if the user is authenticated
+        const userId = req.userId;
+  // Or you might want to extract userId from req.user if the user is authenticated
     if (!userId) {
       return res.json({ success: false, message: "User ID is required" });
     }

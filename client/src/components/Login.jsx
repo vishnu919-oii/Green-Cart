@@ -17,12 +17,13 @@ const Login = () => {
         name,
         email,
         password
-      } )
+      },{ withCredentials: true } )
 
       if (data.success) {
-        toast.success(`Welcome ${data.user.name}!`);
+        localStorage.setItem("user", "true");
+        setUser(data.user);
         navigate('/')
-        setUser(data.user)
+        toast.success(`Welcome ${data.user.name}!`);
         setShowUserLogin(false)
       }else{
         toast.error(data.message)

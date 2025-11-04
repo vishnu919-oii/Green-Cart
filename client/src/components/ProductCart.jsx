@@ -3,7 +3,8 @@ import { assets } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 
 const ProductCart = ({ product }) => {
-  const { currency, addToCart, removeFromCart, cartItems, navigate } = useAppContext();
+  const { currency, addToCart, removeFromCart, cartItems, navigate } =
+    useAppContext();
 
   // Safe category access
   const getCategorySlug = () => {
@@ -33,8 +34,17 @@ const ProductCart = ({ product }) => {
           />
         </div>
         <div className="text-gray-500/60 text-sm">
-          <p>{typeof product.category === "string" ? product.category : product.category?.name || "Unknown"}</p>
-          <p className="text-gray-700 font-medium text-lg truncate w-full">{product.name}</p>
+          <p>
+            {Array.isArray(product.category)
+              ? product.category.join(", ") // show all categories if multiple
+              : typeof product.category === "string"
+              ? product.category
+              : product.category?.name || "Unknown"}
+          </p>
+
+          <p className="text-gray-700 font-medium text-lg truncate w-full">
+            {product.name}
+          </p>
           <div className="flex items-center gap-0.5">
             {Array(5)
               .fill("")
@@ -72,7 +82,9 @@ const ProductCart = ({ product }) => {
                   >
                     -
                   </button>
-                  <span className="w-5 text-center">{cartItems[product._id]}</span>
+                  <span className="w-5 text-center">
+                    {cartItems[product._id]}
+                  </span>
                   <button
                     onClick={() => addToCart(product._id)}
                     className="cursor-pointer text-md px-2 h-full"

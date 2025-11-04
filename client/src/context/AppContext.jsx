@@ -6,26 +6,28 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
-  const currency = import.meta.env.VITE_CURRENCY;
+  const currency = import.meta.env.VITE_CURRENCY || "$";
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
   const [isSeller, setIsSeller] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState({});
+  const [cartItems, setCartItems] = useState(()=>{
+     const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : {};
+  });
   const [searchQuery, setSearchQuery] = useState("");
 
   // ✅ Fetch all products
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("/api/product/list");
-      const data = response.data;
+const {data} = await axios.get('/api/product/list')     
 
       if (data.success) {
         setProducts(data.products);
@@ -33,36 +35,41 @@ export const AppContextProvider = ({ children }) => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.error("Error fetching products:", error);
-      toast.error("Failed to fetch products");
+      toast.error(error.message);
     }
   };
 
-const fetchSeller = async () => {
-  try {
-    const { data } = await axios.get("/api/seller/is-auth");
-    if (data.success) {
-      setIsSeller(true);
-    } else {
+  // ✅ Fetch Seller Status safely
+  const fetchSeller = async () => {
+    try {
+      const { data } = await axios.get("/api/seller/is-auth");
+      // localStorage.getItem("seller") === "true";
+      setIsSeller(!!data.success);
+    } catch (error) {
+      // Don't show popup for unauthorized (normal when logged out)
+      if (error.response?.status !== 401) {
+        toast.error("Failed to verify seller");
+      }
       setIsSeller(false);
     }
-  } catch (error) {
-    setIsSeller(false);
-  }
-};
+  };
+
   // ✅ Fetch User safely
   const fetchUser = async () => {
     try {
       const { data } = await axios.get("/api/user/is-auth");
-      if (data.success) {
-        setUser(data.user);
-        setCartItems(data.user.cartItems);
+      // localStorage.getItem("user") === "true";
+      if(data.success){
+        setUser(!!data.success);
+        setCartItems(data.user.cartItems || JSON.parse(localStorage.getItem("cartItems")) || {});
       }
     } catch (error) {
       setUser(null);
+      // Ignore 401 (not logged in), show only real errors
       if (error.response?.status !== 401) {
         toast.error("Failed to verify user");
       }
+      setUser(false);
     }
   };
 
@@ -112,28 +119,25 @@ const fetchSeller = async () => {
     fetchSeller();
     fetchProducts();
   }, []);
-  // ✅ Load user and seller from localStorage safely (on first render)
-  // ✅ Load seller from localStorage safely
-  
-
-  
 
   // ✅ Update cart only if user is logged in
-  useEffect(() => {
+  useEffect(()=>{
     const updateCart = async () => {
-      try {
-        const { data } = await axios.post("/api/cart/update", { cartItems });
-        if (data.success && data.message) {
-          toast.success(data.message);
-        }
-      } catch (error) {
-        if (error.response?.status !== 401) {
-          toast.error("Failed to sync cart");
-        }
+    try {
+      const {data} = await axios.post('/api/cart/update', {cartItems})
+      if (!data.success) {
+        toast.success(data.message)
       }
-    };
-    if (user) updateCart();
-  }, [cartItems]);
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+  
+  if (user) {
+    updateCart()
+  }
+  },[cartItems])
+
 
   const value = {
     navigate,

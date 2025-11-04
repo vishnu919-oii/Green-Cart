@@ -31,7 +31,11 @@ const AddProduct = () => {
         formData.append("images", files[i]);
       }
 
-      const { data } = await axios.post("/api/product/add", formData);
+      const { data } = await axios.post("/api/product/add", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
       if (data.success) {
         toast.success(data.message);
@@ -47,6 +51,8 @@ const AddProduct = () => {
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
     }
+    console.log("Posting to:", axios.defaults.baseURL + "/api/product/add");
+
   };
 
   return (
