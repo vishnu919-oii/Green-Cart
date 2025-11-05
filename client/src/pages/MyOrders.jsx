@@ -7,7 +7,7 @@ const MyOrders = () => {
 
   const fetchMyOrders = async () => {
     try {
-      const { data } = await axios.get(`/api/order/user`);
+      const { data } = await axios.get('/api/order/user');
       if (data.success) {
         setMyOrders(data.orders);
       }
@@ -20,7 +20,7 @@ const MyOrders = () => {
     if (user) {
       fetchMyOrders()
     }
-  }, [user]);
+  }, [user]); 
   return (
     <div className="mt-16 pb-16">
       <div className="flex flex-col items-end w-max mb-8">

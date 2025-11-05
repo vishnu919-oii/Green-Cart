@@ -54,7 +54,7 @@ const Orders = () => {
                         <p>{order.address.phone}</p>
                     </div>
 
-                    <p className="font-medium text-lg my-auto">{currency}{order.amount}</p>
+                    <p className="font-medium text-lg my-auto">{currency}{Number(order.amount) || 0}</p>
 
                     <div className="flex flex-col text-sm md:text-base text-black/80">
                         <p>Method: {order.paymentType}</p>

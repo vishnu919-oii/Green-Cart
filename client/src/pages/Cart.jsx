@@ -97,7 +97,8 @@ const Cart = () => {
           toast.error(data.message); // Use toast.error instead of toast.success for failure
         }
       }
-    } catch (error) {
+    }
+  catch (error) {
       toast.error(error.message); // Corrected to show error on catch
     }
   };
