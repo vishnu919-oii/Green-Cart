@@ -35,10 +35,10 @@ const MyOrders = () => {
           <p className="flex justify-between md:items-center text-gray-400 md:font-medium max-md:flex-col">
             <span>OrderId : {order._id}</span>
             <span>Payment : {order.paymentType}</span>
-            {/* <span>
+            <span>
               Total Amount : {currency}
               {order.amount}
-            </span> */}
+            </span>
           </p>
           {order.items.map((item, index) => (
             <div key={index} className={`relative bg-white text-gray-500/70 ${order.items.length !== index + 1 && "border-b"} border-gray-300 flex flex-col md:flex-row md:items-center justify-betwen p-4 py-5 md:gap-16 w-full max-w-4xl`}>

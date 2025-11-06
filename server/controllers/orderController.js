@@ -71,7 +71,7 @@ export const PlaceOrderStripe = async (req, res) => {
       items,
       amount: Number(amount),
       address,
-      paymentType: "Online",
+      paymentType:"Online",
     });
 
     // Stripe Gateway Init
