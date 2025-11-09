@@ -1,15 +1,14 @@
 {
   "version": 2,
   "functions": {
-    "api/server.js": {
-      "runtime": "nodejs18.x",
-      "includeFiles": "dist/**"
+    "server.js": {
+      "runtime": "nodejs20.x"
     }
   },
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/server.js"
+      "dest": "server.js"
     }
   ]
 }
