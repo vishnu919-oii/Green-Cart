@@ -20,7 +20,10 @@ await connectDB();
 await connectCloudinary();
 
 //allowed orgins 
-const allowedOrgins = ['http://localhost:5173'|| 'https://green-cart-frontend-alpha.vercel.app']
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://green-cart-frontend-alpha.vercel.app"
+];
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
 
@@ -28,7 +31,10 @@ app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 // MIDDLEWARE Configuration
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: allowedOrgins, credentials: true}));
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 
 
 
