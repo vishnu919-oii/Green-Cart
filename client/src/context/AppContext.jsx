@@ -6,12 +6,12 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL ||'https://green-cart-backend-gamma.vercel.app';
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000' ||'https://green-cart-backend-gamma.vercel.app/';
 
 export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
-  const currency = import.meta.env.VITE_CURRENCY;
+  const currency = import.meta.env.VITE_CURRENCY || "$";
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
