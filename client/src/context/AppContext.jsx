@@ -6,10 +6,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
-  ? import.meta.env.VITE_BACKEND_URL
-  : (import.meta.env.DEV ? "http://localhost:4000" : "https://green-cart-dun-three.vercel.app");
-
+axios.defaults.baseURL =import.meta.env.VITE_BACKEND_URL|| "http://localhost:4000";
 
 export const AppContext = createContext();
 
