@@ -68,7 +68,9 @@ export const changeStock = async (req, res) => {
       return res.json({ success: false, message: "Product not found" });
     }
 
-    const message = updatedProduct.inStock ? "Stock Updated" : "Out Of Stock ";
+    const message = updatedProduct.inStock
+      ? "Stock Updated"
+      : "Out Of Stock ";
 
     return res.json({ success: true, message });
   } catch (error) {
@@ -76,3 +78,4 @@ export const changeStock = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
