@@ -22,7 +22,7 @@ await connectCloudinary();
 //allowed orgins 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://green-cart-frontend-zeta.vercel.app/"
+  "https://green-cart-frontend-zeta.vercel.app"
 ];
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 app.use(cors({
