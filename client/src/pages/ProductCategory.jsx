@@ -5,19 +5,19 @@ import ProductCart from "../components/ProductCart";
 import { categories } from "../assets/assets";
 
 const ProductCategory = () => {
-  const { products } = useAppContext()
+  const { products } = useAppContext();
   const { category } = useParams();
 
   const searchCategory = categories.find(
     (item) => item.path.toLowerCase() === category
   );
-const filteredProducts = products.filter((product) => {
-  const cat =
-    typeof product.category === "string"
-      ? product.category
-      : product.category?.path || product.category?.[0];
-  return cat?.toLowerCase() === category;
-});
+  const filteredProducts = products.filter((product) => {
+    const cat =
+      typeof product.category === "string"
+        ? product.category
+        : product.category?.path || product.category?.[0];
+    return cat?.toLowerCase() === category;
+  });
 
   return (
     <div className="mt-16">
@@ -37,7 +37,9 @@ const filteredProducts = products.filter((product) => {
         </div>
       ) : (
         <div className="flex items-center justify-center h-[60vh]">
-            <p className="text-2xl font-medium text-primary">No Products found in this category.</p>
+          <p className="text-2xl font-medium text-primary">
+            No Products found in this category.
+          </p>
         </div>
       )}
     </div>

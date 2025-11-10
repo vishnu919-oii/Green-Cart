@@ -32,10 +32,10 @@ const AddProduct = () => {
       }
 
       const { data } = await axios.post("/api/product/add", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (data.success) {
         toast.success(data.message);
@@ -52,7 +52,6 @@ const AddProduct = () => {
       toast.error(error.response?.data?.message || error.message);
     }
     console.log("Posting to:", axios.defaults.baseURL + "/api/product/add");
-
   };
 
   return (
@@ -113,7 +112,10 @@ const AddProduct = () => {
 
         {/* Description */}
         <div className="flex flex-col gap-1 max-w-md">
-          <label className="text-base font-medium" htmlFor="product-description">
+          <label
+            className="text-base font-medium"
+            htmlFor="product-description"
+          >
             Product Description
           </label>
           <textarea

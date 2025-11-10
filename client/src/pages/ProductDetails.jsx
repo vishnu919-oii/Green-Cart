@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { Link, useParams } from "react-router-dom";
@@ -19,7 +18,10 @@ const ProductDetails = () => {
     if (products.length > 0 && product) {
       let productsCopy = products.slice();
       productsCopy = productsCopy.filter(
-        (item) => item.category && product.category && item.category === product.category
+        (item) =>
+          item.category &&
+          product.category &&
+          item.category === product.category
       );
       setRelatedProducts(productsCopy.slice(0, 5));
     }
@@ -41,10 +43,11 @@ const ProductDetails = () => {
   return (
     <div className="mt-12">
       <p>
-        <Link to="/">Home</Link> /
-        <Link to="/products">Products</Link> /
-        <Link to={`/products/${getCategorySlug(product.category)}`}>{product.category}</Link> /
-        <span className="text-primary"> {product.name}</span>
+        <Link to="/">Home</Link> /<Link to="/products">Products</Link> /
+        <Link to={`/products/${getCategorySlug(product.category)}`}>
+          {product.category}
+        </Link>{" "}
+        /<span className="text-primary"> {product.name}</span>
       </p>
 
       <div className="flex flex-col md:flex-row gap-16 mt-4">
@@ -88,7 +91,10 @@ const ProductDetails = () => {
               MRP: {currency}
               {product.price}
             </p>
-            <p className="text-2xl font-medium">MRP: {currency}{product.offerPrice}</p>
+            <p className="text-2xl font-medium">
+              MRP: {currency}
+              {product.offerPrice}
+            </p>
             <span className="text-gray-500/70">(inclusive of all taxes)</span>
           </div>
 

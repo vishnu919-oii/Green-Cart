@@ -9,30 +9,34 @@ const Login = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const onSubmitHandler = async (event)=>{
+  const onSubmitHandler = async (event) => {
     try {
       event.preventDefault();
 
-      const {data} = await axios.post(`http://localhost:4000/api/user/${state}`,{
-        name,
-        email,
-        password
-      },{ withCredentials: true } )
+      const { data } = await axios.post(
+        `http://localhost:4000/api/user/${state}`,
+        {
+          name,
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
 
       if (data.success) {
         localStorage.setItem("user", "true");
         setUser(data.user);
-        navigate('/')
+        navigate("/");
         toast.success(`Welcome ${data.user.name}!`);
-        setShowUserLogin(false)
-      }else{
-        toast.error(data.message)
+        setShowUserLogin(false);
+      } else {
+        toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message)
-    }    
-  }
-  
+      toast.error(error.message);
+    }
+  };
+
   return (
     <div
       onClick={() => setShowUserLogin(false)}

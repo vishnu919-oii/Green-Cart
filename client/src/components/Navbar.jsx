@@ -20,7 +20,7 @@ const Navbar = () => {
     try {
       const { data } = await axios.get("/api/user/logout", {
         withCredentials: true,
-      })
+      });
       if (data.success) {
         toast.success(data.message);
         setUser(null);
@@ -47,6 +47,9 @@ const Navbar = () => {
 
       {/* Desktop Menu */}
       <div className="hidden sm:flex items-center gap-8">
+        <button className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80 left-9">
+          <NavLink to={"/seller"}>Seller Dashboard</NavLink>{" "}
+        </button>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/products">All Product</NavLink>
         <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
@@ -66,7 +69,6 @@ const Navbar = () => {
           <img src={assets.cart_icon} alt="cart" className="w-6 opacity-80" />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">
             {getCartCount()}
-            
           </button>
         </div>
 
@@ -122,7 +124,7 @@ const Navbar = () => {
         <div
           className={`${
             open ? "flex" : "hidden"
-          } absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}
+          } absolute z-50 top-14.5 left-0 w-full bg-white shadow-md py-4 flex flex-col items-start gap-4 px-5 md:hidden`}
         >
           <NavLink to="/" onClick={() => setOpen(false)}>
             Home

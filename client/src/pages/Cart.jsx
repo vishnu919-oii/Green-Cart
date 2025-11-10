@@ -20,7 +20,7 @@ const Cart = () => {
   } = useAppContext();
 
   const [cartArray, setCartArray] = useState([]);
-  const [addresses, setAddresses] = useState([]); // Plural form
+  const [addresses, setAddresses] = useState([]); 
   const [showAddress, setShowAddress] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentOption, setPaymentOption] = useState("COD");
@@ -50,8 +50,8 @@ const Cart = () => {
           setSelectedAddress(data.addresses[0]);
         }
       } else if (data.message) {
-  toast.error(data.message);
-}
+        toast.error(data.message);
+      }
     } catch (error) {
       toast.error(error.message);
     }
@@ -78,9 +78,9 @@ const Cart = () => {
           setCartItems({});
           navigate("/my-orders");
         } else {
-          toast.error(data.message); // Use toast.error instead of toast.success for failure
+          toast.error(data.message); 
         }
-      } else{
+      } else {
         // Place Order with Stripe
         const { data } = await axios.post("/api/order/stripe", {
           userId: user._id,
@@ -91,15 +91,14 @@ const Cart = () => {
           address: selectedAddress._id,
         });
         if (data.success) {
-          window.location.replace(data.url)
+          window.location.replace(data.url);
           navigate("/my-orders");
         } else {
-          toast.error(data.message); // Use toast.error instead of toast.success for failure
+          toast.error(data.message); 
         }
       }
-    }
-  catch (error) {
-      toast.error(error.message); // Corrected to show error on catch
+    } catch (error) {
+      toast.error(error.message); 
     }
   };
 

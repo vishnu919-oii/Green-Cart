@@ -34,7 +34,7 @@ export const sellerLogin = async (req, res) => {
 // Check SellerAuth
 export const isSellerAuth = async (req, res) => {
   try {
-    // ✅ authSeller middleware should already have validated token
+    // authSeller middleware should already have validated token
     return res.status(200).json({ success: true, seller: req.seller });
   } catch (error) {
     console.log(error.message);

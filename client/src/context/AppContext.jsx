@@ -6,7 +6,8 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL =import.meta.env.VITE_BACKEND_URL|| "http://localhost:4000";
+axios.defaults.baseURL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 export const AppContext = createContext();
 
@@ -18,16 +19,16 @@ export const AppContextProvider = ({ children }) => {
   const [isSeller, setIsSeller] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState(()=>{
-     const savedCart = localStorage.getItem("cartItems");
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cartItems");
     return savedCart ? JSON.parse(savedCart) : {};
   });
   const [searchQuery, setSearchQuery] = useState("");
 
-  // ✅ Fetch all products
+  //  Fetch all products
   const fetchProducts = async () => {
     try {
-const {data} = await axios.get('/api/product/list')     
+      const { data } = await axios.get("/api/product/list");
 
       if (data.success) {
         setProducts(data.products);
@@ -39,7 +40,7 @@ const {data} = await axios.get('/api/product/list')
     }
   };
 
-  // ✅ Fetch Seller Status safely
+  //  Fetch Seller Status safely
   const fetchSeller = async () => {
     try {
       const { data } = await axios.get("/api/seller/is-auth");
@@ -54,14 +55,18 @@ const {data} = await axios.get('/api/product/list')
     }
   };
 
-  // ✅ Fetch User safely
+  //  Fetch User safely
   const fetchUser = async () => {
     try {
       const { data } = await axios.get("/api/user/is-auth");
       // localStorage.getItem("user") === "true";
-      if(data.success){
+      if (data.success) {
         setUser(!!data.success);
-        setCartItems(data.user.cartItems || JSON.parse(localStorage.getItem("cartItems")) || {});
+        setCartItems(
+          data.user.cartItems ||
+            JSON.parse(localStorage.getItem("cartItems")) ||
+            {}
+        );
       }
     } catch (error) {
       setUser(null);
@@ -73,7 +78,7 @@ const {data} = await axios.get('/api/product/list')
     }
   };
 
-  // ✅ Add to Cart
+  //  Add to Cart
   const addToCart = (itemId) => {
     let cartData = structuredClone(cartItems);
     cartData[itemId] = (cartData[itemId] || 0) + 1;
@@ -81,7 +86,7 @@ const {data} = await axios.get('/api/product/list')
     toast.success("Added to cart");
   };
 
-  // ✅ Update cart item quantity
+  //  Update cart item quantity
   const updateCartItem = (itemId, quantity) => {
     let cartData = structuredClone(cartItems);
     cartData[itemId] = quantity;
@@ -89,7 +94,7 @@ const {data} = await axios.get('/api/product/list')
     toast.success("Cart updated");
   };
 
-  // ✅ Remove item
+  //  Remove item
   const removeFromCart = (itemId) => {
     let cartData = structuredClone(cartItems);
     if (cartData[itemId]) {
@@ -100,7 +105,7 @@ const {data} = await axios.get('/api/product/list')
     toast.success("Removed from cart");
   };
 
-  // ✅ Cart count and total
+  //  Cart count and total
   const getCartCount = () =>
     Object.values(cartItems).reduce((acc, val) => acc + val, 0);
 
@@ -113,31 +118,30 @@ const {data} = await axios.get('/api/product/list')
     return Math.floor(total * 100) / 100;
   };
 
-  // ✅ Initial data load
+  //  Initial data load
   useEffect(() => {
     fetchUser();
     fetchSeller();
     fetchProducts();
   }, []);
 
-  // ✅ Update cart only if user is logged in
-  useEffect(()=>{
+  //  Update cart only if user is logged in
+  useEffect(() => {
     const updateCart = async () => {
-    try {
-      const {data} = await axios.post('/api/cart/update', {cartItems})
-      if (!data.success) {
-        toast.success(data.message)
+      try {
+        const { data } = await axios.post("/api/cart/update", { cartItems });
+        if (!data.success) {
+          toast.success(data.message);
+        }
+      } catch (error) {
+        toast.error(error.message);
       }
-    } catch (error) {
-      toast.error(error.message)
-    }
-  }
-  
-  if (user) {
-    updateCart()
-  }
-  },[cartItems])
+    };
 
+    if (user) {
+      updateCart();
+    }
+  }, [cartItems]);
 
   const value = {
     navigate,

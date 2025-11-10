@@ -1,13 +1,13 @@
-import Order from '../models/order.js';
-import Product from '../models/product.js';
-import stripe from 'stripe';
-import User from '../models/user.js';
+import Order from "../models/order.js";
+import Product from "../models/product.js";
+import stripe from "stripe";
+import User from "../models/user.js";
 
 // Place Order COD: /api/order/cod
 export const PlaceOrderCOD = async (req, res) => {
   try {
     const userId = req.userId;
-    const {items, address } = req.body;
+    const { items, address } = req.body;
     if (!address || !items || items.length === 0) {
       return res.json({ success: false, message: "Invalid Data" });
     }
@@ -71,7 +71,7 @@ export const PlaceOrderStripe = async (req, res) => {
       items,
       amount: Number(amount),
       address,
-      paymentType:"Online",
+      paymentType: "Online",
     });
 
     // Stripe Gateway Init

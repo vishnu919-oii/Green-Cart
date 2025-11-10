@@ -37,29 +37,28 @@ const AddAddress = () => {
     }));
   };
 
-  const { axios , user, navigate} = useAppContext();
+  const { axios, user, navigate } = useAppContext();
 
   const onSubmitHandler = async (e) => {
     try {
       e.preventDefault();
-      const { data } = await axios.post("/api/address/add", { address});
+      const { data } = await axios.post("/api/address/add", { address });
       if (data.success) {
-        
         toast.success(data.message);
-        navigate('/cart')
+        navigate("/cart");
       } else {
         toast.error(data.message);
       }
     } catch (error) {
       toast.error(error.message);
     }
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!user) {
-      navigate("/cart")
+      navigate("/cart");
     }
-  },[])
+  }, []);
   return (
     <div className="mt-16 pb-16">
       <p className="text-2xl md:text-3xl text-gray-500">
