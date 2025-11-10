@@ -24,11 +24,11 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://green-cart-frontend-alpha.vercel.app"
 ];
+app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
-app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
 
 
