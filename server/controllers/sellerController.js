@@ -9,17 +9,21 @@ export const sellerLogin = async (req, res) => {
       password === process.env.SELLER_PASSWORD &&
       email === process.env.SELLER_EMAIL
     ) {
-      const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "7d" });
+      const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
 
       res.cookie("sellerToken", token, {
         httpOnly: true,
-        secure: true,
-        sameSite: "none"
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       });
 
       return res.status(200).json({ success: true, message: "Logged In" });
     } else {
-      return res.status(401).json({ success: false, message: "Invalid Credentials" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid Credentials" });
     }
   } catch (error) {
     console.log(error.message);
@@ -43,9 +47,9 @@ export const sellerLogout = async (req, res) => {
   try {
     res.clearCookie("sellerToken", {
       httpOnly: true,
-      secure: true,
-      sameSite:"none",
-      path: "/", 
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      path: "/",
     });
     return res.status(200).json({ success: true, message: "Logged Out" });
   } catch (error) {

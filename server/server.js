@@ -14,7 +14,6 @@ import { stripeWebhooks } from './controllers/orderController.js';
 
 
 const app = express();
-const PORT = process.env.PORT || 4000 ;
 
 await connectDB();
 await connectCloudinary();
@@ -32,8 +31,14 @@ app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
 }));
 
 
