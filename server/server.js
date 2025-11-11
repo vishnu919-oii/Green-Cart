@@ -24,12 +24,12 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://green-cart-frontend-zeta.vercel.app"
 ];
+
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
-
 
 
 // MIDDLEWARE Configuration
