@@ -12,7 +12,7 @@ const SellerLogin = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/seller/login",
+        "/api/seller/login",
         { email, password },
         { withCredentials: true }
       );
