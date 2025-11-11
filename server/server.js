@@ -21,8 +21,7 @@ await connectCloudinary();
 
 //allowed orgins 
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://green-cart-frontend-zeta.vercel.app"
+  "http://localhost:5173"
 ];
 
 app.use(cors({
@@ -36,10 +35,6 @@ app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 app.use(express.json());
 app.use(cookieParser());
 
-
-
-
-
 app.get('/', (req, res)=> res.send('API is Working'));
 app.use('/api/user',userRouter);
 app.use('/api/seller',sellerRouter);
@@ -49,7 +44,7 @@ app.use('/api/address', addressRouter);
 app.use('/api/order', orderRouter);
 
 app.listen(PORT, ()=>{
-  console.log(`Server is Running on PORT ${PORT}...`)
+  console.log(`Server is Running on PORT ${PORT}`)
 })
 
 
