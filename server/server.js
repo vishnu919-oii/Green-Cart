@@ -26,7 +26,14 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps, curl) or those in the list
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS policy: This origin is not allowed'));
+    }
+  },
   credentials: true,
 }));
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
@@ -37,6 +44,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get('/', (req, res)=> res.send('API is Working'));
+
+
 app.use('/api/user',userRouter);
 app.use('/api/seller',sellerRouter);
 app.use('/api/product',productRouter);
@@ -44,13 +53,11 @@ app.use('/api/cart', cartRouter);
 app.use('/api/address', addressRouter);
 app.use('/api/order', orderRouter);
 
-app.listen(PORT, ()=>{
-  console.log(`Server is Running on PORT ${PORT}`)
-})
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => {
+    console.log(`Server is Running on PORT ${PORT}`);
+  });
+}
 
-
-
-
-
-
-export default app; // ✅ required by Vercel
+export default app;

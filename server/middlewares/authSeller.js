@@ -12,6 +12,7 @@ const authSeller = (req, res, next) => {
     req.seller = decoded;
     next();
   } catch (error) {
+    console.error("authSeller error:", error.message);
     return res.status(401).json({ success: false, message: "Invalid Token" });
   }
 };
