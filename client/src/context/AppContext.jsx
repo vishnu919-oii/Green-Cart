@@ -7,8 +7,7 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL =
-  import.meta.env.VITE_BACKEND_URL ||
-  "http://localhost:4000","https://green-cart-backend-neon.vercel.app";
+  import.meta.env.VITE_BACKEND_URL ||"https://green-cart-backend-neon.vercel.app";
 
 export const AppContext = createContext();
 
