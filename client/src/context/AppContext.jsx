@@ -4,7 +4,9 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+axios.defaults.baseURL =
+  import.meta.env.VITE_BACKEND_URL ||
+  (import.meta.env.DEV ? "http://localhost:4000" : undefined);
 
 export const AppContext = createContext();
 
@@ -76,36 +78,12 @@ export const AppContextProvider = ({ children }) => {
   };
 
   // ✅ Add to Cart
-const addToCart = async (itemId) => {
-  try {
-    // Check if user is logged in
-    if (!user) {
-      toast.error("Please login to add items to cart");
-      setShowUserLogin(true); // show login popup if you have one
-      return;
-    }
-
-    const { data } = await axios.post("/api/cart/add", { productId: itemId });
-
-    if (data.success) {
-      let cartData = structuredClone(cartItems);
-      cartData[itemId] = (cartData[itemId] || 0) + 1;
-      setCartItems(cartData);
-      toast.success("Added to cart");
-    } else {
-      toast.error(data.message || "Something went wrong");
-    }
-  } catch (error) {
-    console.log("Add to cart error:", error.response?.data || error.message);
-    if (error.response?.status === 401) {
-      toast.error("Please login to add items to cart");
-      setShowUserLogin(true);
-    } else {
-      toast.error(error.message);
-    }
-  }
-};
-
+  const addToCart = (itemId) => {
+    let cartData = structuredClone(cartItems);
+    cartData[itemId] = (cartData[itemId] || 0) + 1;
+    setCartItems(cartData);
+    toast.success("Added to cart");
+  };
 
   // ✅ Update cart item quantity
   const updateCartItem = (itemId, quantity) => {
@@ -140,14 +118,11 @@ const addToCart = async (itemId) => {
   };
 
   // ✅ Initial data load
- useEffect(() => {
-  const init = async () => {
-    await fetchUser();    // load user
-    await fetchSeller();  // load seller (if needed)
-    await fetchProducts();// load products
-  };
-  init();
-}, []);
+  useEffect(() => {
+    fetchUser();
+    fetchSeller();
+    fetchProducts();
+  }, []);
 
   // ✅ Update cart only if user is logged in
   useEffect(() => {
