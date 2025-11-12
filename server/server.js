@@ -22,7 +22,8 @@ await connectCloudinary();
 //allowed orgins 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://green-cart-frontend-iota.vercel.app"];
+  "https://green-cart-frontend-iota.vercel.app",
+"https://green-cart-frontend-alpha.vercel.app"];
 
 app.use(cors({
   origin: function (origin, callback) {

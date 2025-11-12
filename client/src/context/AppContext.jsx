@@ -73,12 +73,27 @@ const {data} = await axios.get('/api/product/list')
   };
 
   // ✅ Add to Cart
-  const addToCart = (itemId) => {
-    let cartData = structuredClone(cartItems);
-    cartData[itemId] = (cartData[itemId] || 0) + 1;
-    setCartItems(cartData);
-    toast.success("Added to cart");
-  };
+  const addToCart = async (itemId) => {
+  try {
+    const { data } = await axios.post("/api/cart/add", { productId: itemId });
+
+    if (data.success) {
+      let cartData = structuredClone(cartItems);
+      cartData[itemId] = (cartData[itemId] || 0) + 1;
+      setCartItems(cartData);
+      toast.success("Added to cart");
+    } else {
+      toast.error(data.message || "Something went wrong");
+    }
+  } catch (error) {
+    if (error.response?.data?.message === "Not Authorized") {
+      toast.error("Please login to add items to cart");
+    } else {
+      toast.error(error.message);
+    }
+  }
+};
+
 
   // ✅ Update cart item quantity
   const updateCartItem = (itemId, quantity) => {
