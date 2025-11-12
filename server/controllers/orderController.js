@@ -154,12 +154,13 @@ export const getUserOrders = async (req, res) => {
       return res.json({ success: false, message: "User ID is required" });
     }
 
-    const orders = await Order.find({
-      userId,
-      $or: [{ paymentType: "COD" }, { isPaid: true }],
-    })
-      .populate("items.product address")
-      .sort({ createdAt: -1 });
+  const orders = await Order.find({
+  userId,
+  $or: [{ paymentType: "COD" }, { paymentType: "Online" }]
+})
+  .populate("items.product address")
+  .sort({ createdAt: -1 });
+
 
     res.json({ success: true, orders });
   } catch (error) {

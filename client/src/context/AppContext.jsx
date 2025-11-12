@@ -57,10 +57,11 @@ const {data} = await axios.get('/api/product/list')
     try {
       const { data } = await axios.get("/api/user/is-auth");
       // localStorage.getItem("user") === "true";
-      if(data.success){
-        setUser(!!data.success);
-        setCartItems(data.user.cartItems || JSON.parse(localStorage.getItem("cartItems")) || {});
-      }
+      if (data.success) {
+  setUser(data.user); // store full user object
+  setCartItems(data.user.cartItems || JSON.parse(localStorage.getItem("cartItems")) || {});
+}
+
     } catch (error) {
       setUser(null);
       // Ignore 401 (not logged in), show only real errors
