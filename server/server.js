@@ -19,19 +19,10 @@ const PORT = process.env.PORT || 4000 ;
 await connectDB();
 await connectCloudinary();
 
-//allowed orgins 
-const allowedOrigins = [
-  "https://green-cart-frontend-iota.vercel.app"];
+
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps, curl) or those in the list
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS policy: This origin is not allowed'));
-    }
-  },
+  origin:"https://green-cart-frontend-iota.vercel.app",
   credentials: true,
 }));
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
