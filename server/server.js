@@ -22,7 +22,7 @@ await connectCloudinary();
 
 
 app.use(cors({
-  origin:"https://green-cart-frontend-iota.vercel.app",
+  origin:["https://green-cart-frontend-iota.vercel.app"],
   credentials: true,
 }));
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
