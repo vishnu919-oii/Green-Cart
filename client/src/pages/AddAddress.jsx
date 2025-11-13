@@ -40,19 +40,28 @@ const AddAddress = () => {
   const { axios, user, navigate } = useAppContext();
 
   const onSubmitHandler = async (e) => {
-    try {
-      e.preventDefault();
-      const { data } = await axios.post("/api/address/add", { address });
-      if (data.success) {
-        toast.success(data.message);
-        navigate("/cart");
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
+  e.preventDefault();
+  try {
+    const { data } = await axios.post(
+      "/api/address/add",
+      { address },
+      { withCredentials: true } 
+    );
+
+    if (data.success) {
+      toast.success(data.message);
+      navigate("/cart");
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    if (error.response?.status === 401) {
+      toast.error("Please login to save address");
+    } else {
       toast.error(error.message);
     }
-  };
+  }
+};
 
   useEffect(() => {
     if (!user) {
