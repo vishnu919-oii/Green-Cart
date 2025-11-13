@@ -43,7 +43,7 @@ const AddAddress = () => {
   e.preventDefault();
   try {
     const { data } = await axios.post(
-      "/api/address/add",
+      "https://green-cart-backend-kappa-sandy.vercel.app/api/address/add",
       { address },
       { withCredentials: true } 
     );
