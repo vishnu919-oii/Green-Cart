@@ -13,13 +13,14 @@ export const sellerLogin = async (req, res) => {
         expiresIn: "7d",
       });
 
-      res.cookie("sellerToken", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        path: "/", 
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
+     res.cookie("sellerToken", token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", // ✅ True only in prod
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+
 
       return res.status(200).json({ success: true, message: "Logged In" });
     } else {

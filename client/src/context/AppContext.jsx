@@ -115,12 +115,16 @@ export const AppContextProvider = ({ children }) => {
     return Math.floor(total * 100) / 100;
   };
 
-  // ✅ Initial data load
-  useEffect(() => {
-    fetchUser();
+
+ useEffect(() => {
+  const storedSeller = localStorage.getItem("seller");
+  if (storedSeller === "true") {
     fetchSeller();
-    fetchProducts();
-  }, []);
+  }
+  fetchUser();
+  fetchProducts();
+}, []);
+
 
   // ✅ Update cart only if user is logged in
   useEffect(() => {
