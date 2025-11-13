@@ -20,6 +20,8 @@ await connectDB();
 await connectCloudinary();
 
 
+// MIDDLEWARE Configuration
+app.use(cookieParser());
 
 app.use(cors({
   origin:["https://green-cart-frontend-iota.vercel.app"],
@@ -28,9 +30,7 @@ app.use(cors({
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
 
-// MIDDLEWARE Configuration
 app.use(express.json());
-app.use(cookieParser());
 
 app.get('/', (req, res)=> res.send('API is Working'));
 
