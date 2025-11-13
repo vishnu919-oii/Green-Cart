@@ -71,6 +71,7 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // true on Vercel
       sameSite: "none",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -87,12 +88,12 @@ export const login = async (req, res) => {
 // Check Auth : /api/user/is-auth
 export const isAuth = async (req, res) => {
   try {
-    const userId = req.userId;
-    const user = await User.findById(userId).select("-password");
-    return res.json({ success: true, user });
+    // const userId = req.userId;
+    // const user = await User.findById(userId).select("-password");
+    return res.status(200).json({ success: true, user: req.user});
   } catch (error) {
     console.log(error.message);
-    return res.json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -101,10 +102,11 @@ export const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // true on Vercel
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      path: "/",
     });
-    return res.json({ success: true, message: "Logged Out" });
+    return res.status(200).json({ success: true, message: "Logged Out" });
   } catch (error) {
     console.log(error.message);
     return res.json({ success: false, message: error.message });
