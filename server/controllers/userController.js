@@ -70,7 +70,7 @@ export const login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true, // true on Vercel
-      sameSite: "none",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -90,7 +90,9 @@ export const isAuth = async (req, res) => {
   try {
     const userId = req.userId;
     const user = await User.findById(userId).select("-password");
-    return res.status(200).json({ success: true, user: req.userId ? user : null });
+    return res
+      .status(200)
+      .json({ success: true, user: req.userId ? user : null });
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ success: false, message: error.message });

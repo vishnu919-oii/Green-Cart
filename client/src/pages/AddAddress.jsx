@@ -41,11 +41,12 @@ const AddAddress = () => {
 
   const onSubmitHandler = async (e) => {
   e.preventDefault();
+
   try {
     const { data } = await axios.post(
-      "https://green-cart-backend-kappa-sandy.vercel.app/api/address/add",
+      "/api/address/add", // ✅ no need for full URL since baseURL is set
       { address },
-      { withCredentials: true } 
+      { withCredentials: true }
     );
 
     if (data.success) {
@@ -62,6 +63,7 @@ const AddAddress = () => {
     }
   }
 };
+
 
   useEffect(() => {
     if (!user) {
