@@ -24,16 +24,14 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-app.use(
-  cors({
-    origin: [
-      "https://green-cart-frontend-iota.vercel.app", // ✅ your deployed frontend
-      "http://localhost:5173", // ✅ for local dev
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: [
+    "https://green-cart-frontend-iota.vercel.app",
+    "http://localhost:5173"
+  ],
+  credentials: true
+}));
+
 app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 
 app.get("/", (req, res) => res.send("API is Working"));

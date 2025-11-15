@@ -25,12 +25,13 @@ export const register = async (req, res) => {
     });
 
     res.cookie("token", token, {
-      httpOnly: true, // Prevent javascript to access cookie
-      secure: true,
-      sameSite: "none",
-      path: "/",  
-      maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expiration time
-    });
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+
 
     return res.json({
       success: true,
@@ -70,11 +71,12 @@ export const login = async (req, res) => {
 
    res.cookie("token", token, {
   httpOnly: true,
-  secure: true,
-  sameSite:"none",
-  path: "/",
+  secure: true,        // always true on vercel
+  sameSite: "none",    // required for cross-domain cookie
+  path: "/",           // REQUIRED
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
+
 
 
     return res.json({
@@ -106,8 +108,8 @@ export const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      secure:true,
+      sameSite:"none",
       path: "/",
     });
     return res.status(200).json({ success: true, message: "Logged Out" });
