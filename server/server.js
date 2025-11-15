@@ -1,4 +1,3 @@
-import cookieParser from "cookie-parser";
 import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
@@ -11,6 +10,7 @@ import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import addressRouter from "./routes/addressRoute.js";
 import { stripeWebhooks } from "./controllers/orderController.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
