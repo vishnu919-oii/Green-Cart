@@ -4,12 +4,13 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL || "https://green-cart-backend-kappa-sandy.vercel.app";
+axios.defaults.baseURL =
+  import.meta.env.VITE_BACKEND_URL ||"https://green-cart-backend-kappa-sandy.vercel.app";
 
 export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
-  const currency = import.meta.env.VITE_CURRENCY;
+  const currency = import.meta.env.VITE_CURRENCY || "$";
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
@@ -55,8 +56,8 @@ export const AppContextProvider = ({ children }) => {
   // ✅ Fetch User safely
   const fetchUser = async () => {
     try {
-      const { data } = await axios.get("/api/user/is-auth");
-      // localStorage.getItem("user") === "true";
+      const { data } = await axios.get("/api/user/is-auth", { withCredentials: true });
+      localStorage.getItem("user") === "true";
       if (data.success) {
         setUser(data.user); // store full user object
         setCartItems(
@@ -67,7 +68,6 @@ export const AppContextProvider = ({ children }) => {
       }
     } catch (error) {
       setUser(null);
-      // Ignore 401 (not logged in), show only real errors
       if (error.response?.status !== 401) {
         toast.error("Failed to verify user");
       }
@@ -127,11 +127,13 @@ export const AppContextProvider = ({ children }) => {
     const updateCart = async () => {
       try {
         const { data } = await axios.post("/api/cart/update", { cartItems });
-        if (!data.success) {
+        if (!!data.success) {
           toast.success(data.message);
         }
       } catch (error) {
-        toast.error(error.message);
+        if (error.response?.status !== 401) {
+          toast.error(error.message);
+        }
       }
     };
 

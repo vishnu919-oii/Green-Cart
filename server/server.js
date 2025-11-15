@@ -18,6 +18,12 @@ const PORT = process.env.PORT || 4000;
 await connectDB();
 await connectCloudinary();
 
+
+// MIDDLEWARE Configuration
+app.use(express.json());
+app.use(cookieParser());
+
+
 app.use(
   cors({
     origin: [
@@ -29,11 +35,6 @@ app.use(
   })
 );
 app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
-
-app.use(cookieParser());
-
-// MIDDLEWARE Configuration
-app.use(express.json());
 
 app.get("/", (req, res) => res.send("API is Working"));
 

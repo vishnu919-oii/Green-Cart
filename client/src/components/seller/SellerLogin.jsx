@@ -8,7 +8,7 @@ const SellerLogin = () => {
   const [password, setPassword] = useState("");
 
   const onSubmitHandler = async (event) => {
-    event.preventDefault(); // ✅ Corrected typo
+    event.preventDefault();
 
     try {
       const { data } = await axios.post(

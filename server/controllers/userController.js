@@ -1,5 +1,5 @@
 import User from "../models/user.js";
-import bcrypt from "bcryptjs";
+import bcrypt, { truncates } from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 // Register User : /api/user/register
@@ -26,8 +26,9 @@ export const register = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true, // Prevent javascript to access cookie
-      secure: process.env.NODE_ENV === "production", // true on Vercel
+      secure: true,
       sameSite: "none",
+      path: "/",  
       maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expiration time
     });
 
@@ -67,13 +68,14 @@ export const login = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true, // true on Vercel
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+   res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite:"none",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+
 
     return res.json({
       success: true,

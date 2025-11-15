@@ -3,8 +3,13 @@ import { assets } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 
 const ProductCart = ({ product }) => {
-  const { currency, addToCart, removeFromCart, cartItems, navigate } =
-    useAppContext();
+  const {
+    currency,
+    addToCart,
+    removeFromCart,
+    cartItems,
+    navigate,
+  } = useAppContext();
 
   // Safe category access
   const getCategorySlug = () => {
@@ -59,7 +64,7 @@ const ProductCart = ({ product }) => {
             <p>(4)</p>
           </div>
           <div className="flex items-end justify-between mt-3">
-            <p className="md:text-xl text-base font-medium text-primary">
+            <p className="md:text-small text-base font-medium text-primary">
               {currency} {product.offerPrice}{" "}
               <span className="text-gray-500/60 md:text-sm text-xs line-through">
                 {currency} {product.price}
@@ -69,7 +74,9 @@ const ProductCart = ({ product }) => {
               {!cartItems[product._id] ? (
                 <button
                   className="flex items-center justify-center gap-1 bg-primary/10 border border-primary/40 md:w-[80px] w-[64px] h-[34px] rounded text-primary-600 font-medium cursor-pointer"
-                  onClick={() => addToCart(product._id)}
+                  onClick={() => {
+                    addToCart(product._id);
+                  }}
                 >
                   <img src={assets.cart_icon} alt="cart" />
                   Add
