@@ -29,6 +29,7 @@ export const register = async (req, res) => {
       secure: true,
       sameSite: "none",
       path: "/",
+      domain: ".vercel.app", 
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -73,6 +74,7 @@ export const login = async (req, res) => {
       secure: true, // always true on vercel
       sameSite: "none",
       path: "/",
+      domain: ".vercel.app", 
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
