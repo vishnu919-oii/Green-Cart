@@ -44,9 +44,8 @@ export const AppContextProvider = ({ children }) => {
   // ✅ Fetch Seller Status safely
   const fetchSeller = async () => {
     try {
-      const { data } = await axios.get("/api/seller/is-auth");
-      // localStorage.getItem("seller") === "true";
-      setIsSeller(!!data.success);
+      const { data } = await axios.get("/api/seller/is-auth", { withCredentials: true });
+      setIsSeller(data.success ? true : false);
     } catch (error) {
       setIsSeller(false);
     }
@@ -58,7 +57,7 @@ export const AppContextProvider = ({ children }) => {
       const { data } = await axios.get("/api/user/is-auth", { withCredentials: true });
       localStorage.getItem("user") === "true";
       if (data.success) {
-        setUser(data.user); // store full user object
+        setUser(data.user); 
         setCartItems(
           data.user.cartItems ||
             JSON.parse(localStorage.getItem("cartItems")) ||
