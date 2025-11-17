@@ -4,8 +4,11 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL =
-  import.meta.env.VITE_BACKEND_URL ||"https://green-cart-backend-kappa-sandy.vercel.app";
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
+  ? import.meta.env.VITE_BACKEND_URL
+  : (import.meta.env.DEV
+      ? "http://localhost:4000"
+      : "https://green-cart-backend-kappa-sandy.vercel.app");
 
 export const AppContext = createContext();
 
