@@ -48,10 +48,6 @@ export const AppContextProvider = ({ children }) => {
       // localStorage.getItem("seller") === "true";
       setIsSeller(!!data.success);
     } catch (error) {
-      // Don't show popup for unauthorized (normal when logged out)
-      if (error.response?.status !== 401) {
-        toast.error("Failed to verify seller");
-      }
       setIsSeller(false);
     }
   };
@@ -71,10 +67,6 @@ export const AppContextProvider = ({ children }) => {
       }
     } catch (error) {
       setUser(null);
-      if (error.response?.status !== 401) {
-        toast.error("Failed to verify user");
-      }
-      setUser(false);
     }
   };
 
