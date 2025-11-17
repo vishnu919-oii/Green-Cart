@@ -13,6 +13,7 @@ import { stripeWebhooks } from "./controllers/orderController.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 4000;
 
 await connectDB();
@@ -23,6 +24,7 @@ await connectCloudinary();
 
 app.use(cors({
   origin: "https://green-cart-frontend-iota.vercel.app",
+  
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
 
