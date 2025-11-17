@@ -19,12 +19,8 @@ const PORT = process.env.PORT || 4000;
 await connectDB();
 await connectCloudinary();
 
-
-
-
 app.use(cors({
-  origin: "https://green-cart-frontend-iota.vercel.app",
-  
+  origin: ["https://green-cart-frontend-iota.vercel.app","http://localhost:5173"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
 
