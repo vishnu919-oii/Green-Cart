@@ -14,14 +14,10 @@ const Login = () => {
       event.preventDefault();
 
       const { data } = await axios.post(
-        `http://localhost:4000/api/user/${state}`,
-        {
-          name,
-          email,
-          password,
-        },
-        { withCredentials: true }
-      );
+  `/api/user/${state}`,
+  { name, email, password }
+);
+
 
       if (data.success) {
         localStorage.setItem("user", "true");

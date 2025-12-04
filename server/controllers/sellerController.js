@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-// Login Seller
+// Login Seller: /api/seller/login
 export const sellerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -12,52 +12,47 @@ export const sellerLogin = async (req, res) => {
       const token = jwt.sign({ email }, process.env.JWT_SECRET, {
         expiresIn: "7d",
       });
-
       res.cookie("sellerToken", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        domain:
-          process.env.NODE_ENV === "production" ? ".vercel.app" : "localhost",
+        secure: false,
+        sameSite: "lax",
         path: "/",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      return res.status(200).json({ success: true, message: "Logged In" });
+      return res.json({ success: true, message: "Logged In" });
     } else {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid Credentials" });
+      return res.json({ success: false, message: "Invalid Credentials" });
     }
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
-// Check SellerAuth
+// Check SellerAuth : /api/seller/is-auth
 export const isSellerAuth = async (req, res) => {
   try {
-    // authSeller middleware should already have validated token
-    return res.status(200).json({ success: true, seller: req.seller });
+    return res.json({ success: true });
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
-// Logout Seller
+// Logout Seller: /api/seller/logout
 export const sellerLogout = async (req, res) => {
   try {
     res.clearCookie("sellerToken", {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: false,
+      sameSite: "lax",
       path: "/",
     });
-    return res.status(200).json({ success: true, message: "Logged Out" });
+
+    return res.json({ success: true, message: "Logged Out" });
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };

@@ -15,17 +15,21 @@ const ProductDetails = () => {
   const product = products.find((item) => item._id === id);
 
   useEffect(() => {
-    if (products.length > 0 && product) {
-      let productsCopy = products.slice();
-      productsCopy = productsCopy.filter(
-        (item) =>
-          item.category &&
-          product.category &&
-          item.category === product.category
-      );
-      setRelatedProducts(productsCopy.slice(0, 5));
-    }
-  }, [products, product]);
+  if (products.length > 0 && product) {
+    let mainCategory = Array.isArray(product.category)
+      ? product.category[0]
+      : product.category;
+
+    let related = products.filter(
+      (item) =>
+        Array.isArray(item.category) &&
+        item.category.includes(mainCategory)
+    );
+
+    setRelatedProducts(related.slice(0, 5));
+  }
+}, [products, product]);
+
 
   useEffect(() => {
     if (product?.image?.[0]) {
@@ -34,9 +38,14 @@ const ProductDetails = () => {
   }, [product]);
 
   // Safely retrieve category slug
-  const getCategorySlug = (category) => {
-    return typeof category === "string" ? category.toLowerCase() : "unknown";
-  };
+ const getCategorySlug = (category) => {
+  if (Array.isArray(category) && category.length > 0) {
+    return category[0].toLowerCase();
+  }
+  if (typeof category === "string") return category.toLowerCase();
+  return "unknown";
+};
+
 
   if (!product) return <p>Loading...</p>; // Handle loading or missing product
 
@@ -45,7 +54,8 @@ const ProductDetails = () => {
       <p>
         <Link to="/">Home</Link> /<Link to="/products">Products</Link> /
         <Link to={`/products/${getCategorySlug(product.category)}`}>
-          {product.category}
+          {Array.isArray(product.category) ? product.category[0] : product.category}
+
         </Link>{" "}
         /<span className="text-primary"> {product.name}</span>
       </p>
@@ -132,7 +142,7 @@ const ProductDetails = () => {
           <div className="w-20 h-0.5 bg-primary rounded-full mt-2"></div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 lg:grid-cols-5 mt-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 lg:grid-cols-5 mt-6 w-full">
           {relatedProducts
             .filter((product) => product.inStock)
             .map((product, index) => (

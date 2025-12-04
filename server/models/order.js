@@ -10,10 +10,10 @@ const orderSchema = new mongoose.Schema(
           required: true,
           ref: "product",
         },
-        quantity: { type: String, required: true },
+        quantity: { type: Number, required: true },
       },
     ],
-    amount: { type: String, required: true },
+    amount: { type: Number, required: true },
     address: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

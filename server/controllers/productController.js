@@ -52,30 +52,12 @@ export const productById = async (req, res) => {
 // Change Product inStock : /api/product/add
 export const changeStock = async (req, res) => {
   try {
-    const { id, inStock } = req.body;
-
-    if (typeof inStock !== "boolean") {
-      return res.json({ success: false, message: "Invalid stock value" });
-    }
-
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      { inStock },
-      { new: true }
-    );
-
-    if (!updatedProduct) {
-      return res.json({ success: false, message: "Product not found" });
-    }
-
-    const message = updatedProduct.inStock
-      ? "Stock Updated"
-      : "Out Of Stock ";
-
-    return res.json({ success: true, message });
+    const { id } = req.body;
+    const { inStock } = req.body;
+    await Product.findByIdAndUpdate(id, { inStock });
+    res.json({ success: true, message: "Stock Updated" });
   } catch (error) {
-    console.log(error);
-    return res.json({ success: false, message: error.message });
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
   }
 };
-

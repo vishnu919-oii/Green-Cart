@@ -4,11 +4,8 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
-  ? import.meta.env.VITE_BACKEND_URL
-  : (import.meta.env.DEV
-      ? "http://localhost:4000"
-      : "https://green-cart-backend-kappa-sandy.vercel.app");
+axios.defaults.baseURL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 export const AppContext = createContext();
 
@@ -20,10 +17,7 @@ export const AppContextProvider = ({ children }) => {
   const [isSeller, setIsSeller] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem("cartItems");
-    return savedCart ? JSON.parse(savedCart) : {};
-  });
+  const [cartItems, setCartItems] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
 
   // ✅ Fetch all products
@@ -31,11 +25,7 @@ export const AppContextProvider = ({ children }) => {
     try {
       const { data } = await axios.get("/api/product/list");
 
-      if (data.success) {
-        setProducts(data.products);
-      } else if (data.message) {
-        toast.error(data.message);
-      }
+      if (data.success) setProducts(data.products);
     } catch (error) {
       toast.error(error.message);
     }
@@ -44,8 +34,12 @@ export const AppContextProvider = ({ children }) => {
   // ✅ Fetch Seller Status safely
   const fetchSeller = async () => {
     try {
-      const { data } = await axios.get("/api/seller/is-auth", { withCredentials: true });
-      setIsSeller(data.success ? true : false);
+      const { data } = await axios.get("/api/seller/is-auth");
+      if (data.success) {
+        setIsSeller(true);
+      } else {
+        setIsSeller(false);
+      }
     } catch (error) {
       setIsSeller(false);
     }
@@ -54,18 +48,22 @@ export const AppContextProvider = ({ children }) => {
   // ✅ Fetch User safely
   const fetchUser = async () => {
     try {
-      const { data } = await axios.get("/api/user/is-auth", { withCredentials: true });
-      localStorage.getItem("user") === "true";
+      const { data } = await axios.get("/api/user/is-auth");
       if (data.success) {
-        setUser(data.user); 
+        setUser(data.user);
         setCartItems(
-          data.user.cartItems ||
-            JSON.parse(localStorage.getItem("cartItems")) ||
-            {}
+          typeof data.user.cartItems === "object" &&
+            !Array.isArray(data.user.cartItems)
+            ? data.user.cartItems
+            : {}
         );
+      } else {
+        setUser(null);
+        setCartItems({});
       }
-    } catch (error) {
+    } catch {
       setUser(null);
+      setCartItems({});
     }
   };
 
@@ -82,7 +80,7 @@ export const AppContextProvider = ({ children }) => {
     let cartData = structuredClone(cartItems);
     cartData[itemId] = quantity;
     setCartItems(cartData);
-    toast.success("Cart updated");
+    toast.success("Cart Updated");
   };
 
   // ✅ Remove item
@@ -98,7 +96,10 @@ export const AppContextProvider = ({ children }) => {
 
   // ✅ Cart count and total
   const getCartCount = () =>
-    Object.values(cartItems).reduce((acc, val) => acc + val, 0);
+    Object.values(cartItems).reduce((total, val) => {
+      if (typeof val === "object") return total + (Number(val.qty) || 0);
+      return total + (Number(val) || 0);
+    }, 0);
 
   const getCartAmount = () => {
     let total = 0;
@@ -118,12 +119,11 @@ export const AppContextProvider = ({ children }) => {
 
   // ✅ Update cart only if user is logged in
   useEffect(() => {
+    if (!user) return; // wait until user exists
+
     const updateCart = async () => {
       try {
-        const { data } = await axios.post("/api/cart/update", { cartItems });
-        if (!!data.success) {
-          toast.success(data.message);
-        }
+        await axios.post("/api/cart/update", { cartItems }, { withCredentials: true });
       } catch (error) {
         if (error.response?.status !== 401) {
           toast.error(error.message);
@@ -131,10 +131,8 @@ export const AppContextProvider = ({ children }) => {
       }
     };
 
-    if (user) {
-      updateCart();
-    }
-  }, [cartItems]);
+    updateCart();
+  }, [cartItems,user]); // REMOVE user from dependency
 
   const value = {
     navigate,

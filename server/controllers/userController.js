@@ -1,5 +1,5 @@
 import User from "../models/user.js";
-import bcrypt, { truncates } from "bcryptjs";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 // Register User : /api/user/register
@@ -24,14 +24,15 @@ export const register = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      domain: ".vercel.app", 
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+   res.cookie("token", token, {
+  httpOnly: true,
+  secure: false,    // local: false
+  sameSite: "lax",  // MUST be lax for localhost
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+
+
 
     return res.json({
       success: true,
@@ -70,13 +71,14 @@ export const login = async (req, res) => {
     });
 
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: true, // always true on vercel
-      sameSite: "none",
-      domain: ".vercel.app", 
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+  httpOnly: true,
+  secure: false,    // local: false
+  sameSite: "lax",  // MUST be lax for localhost
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+
+
 
     return res.json({
       success: true,
@@ -91,13 +93,15 @@ export const login = async (req, res) => {
 // Check Auth : /api/user/is-auth
 export const isAuth = async (req, res) => {
   try {
-    const userId = req.userId;
-    const user = await User.findById(userId).select("-password");
-    return res
-      .status(200)
-      .json({ success: true, user: req.userId ? user : null });
+    const user = await User.findById(req.userId).select("-password");
+
+    if (!user)
+      return res
+        .status(401)
+        .json({ success: false, message: "Not Authorized" });
+
+    return res.json({ success: true, user: { ...user.toObject(), cartItems: user.cartItems || {} },});
   } catch (error) {
-    console.log(error.message);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -107,12 +111,11 @@ export const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      domain: ".vercel.app",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       path: "/",
     });
-    return res.status(200).json({ success: true, message: "Logged Out" });
+    return res.json({ success: true, message: "Logged Out" });
   } catch (error) {
     console.log(error.message);
     return res.json({ success: false, message: error.message });

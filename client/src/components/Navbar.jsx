@@ -24,6 +24,8 @@ const Navbar = () => {
       if (data.success) {
         toast.success(data.message);
         setUser(null);
+        setCartItems({}); // CLEAR cart on logout
+
         navigate("/");
       } else {
         toast.error(data.message);

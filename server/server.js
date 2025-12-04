@@ -13,30 +13,24 @@ import { stripeWebhooks } from "./controllers/orderController.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
-app.set("trust proxy", 1);
-const PORT = process.env.PORT || 4000;
+const port = process.env.PORT || 4000;
 
 await connectDB();
 await connectCloudinary();
 
-// MIDDLEWARE Configuration
+// MUST COME FIRST
 app.use(express.json());
 app.use(cookieParser());
 
 app.use(
   cors({
-    origin: [
-      "https://green-cart-frontend-iota.vercel.app",
-      "http://localhost:5173"
-    ],
+    origin: "http://localhost:5173",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
+// Stripe webhook AFTER middleware
 app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
-
 
 app.get("/", (req, res) => res.send("API is Working"));
 
@@ -47,11 +41,6 @@ app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/order", orderRouter);
 
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 4000;
-  app.listen(PORT, () => {
-    console.log(`Server is Running on PORT ${PORT}`);
-  });
-}
+app.listen(port, () => console.log(`Server started on PORT:${port}`));
 
 export default app;

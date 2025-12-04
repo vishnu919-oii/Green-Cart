@@ -50,8 +50,11 @@ const AddAddress = () => {
     );
 
     if (data.success) {
-      toast.success(data.message);
-      navigate("/cart");
+      toast.success(data.message); // Fetch addresses again
+      const res = await axios.get("/api/address/get", { withCredentials: true });
+      if (res.data.success) {
+        setAddresses(res.data.addresses); // store in state to display
+      }
     } else {
       toast.error(data.message);
     }

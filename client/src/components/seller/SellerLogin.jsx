@@ -17,7 +17,6 @@ const SellerLogin = () => {
         { withCredentials: true }
       );
       if (data.success) {
-        localStorage.setItem("seller", "true");
         setIsSeller(true);
         toast.success("Seller logged in!");
         navigate("/seller");
