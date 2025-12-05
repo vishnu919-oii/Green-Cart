@@ -27,12 +27,10 @@ const SellerLogin = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (isSeller) {
-      navigate("/seller");
-    }
-  }, [isSeller]);
+useEffect(() => {
+  if (isSeller) navigate("/seller", { replace: true });
+}, [isSeller]);
+;
 
   // Prevent rendering login form if already logged in or during loading
   if (isSeller || loading) {
