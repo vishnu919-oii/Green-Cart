@@ -32,10 +32,7 @@ useEffect(() => {
 }, [isSeller]);
 ;
 
-  // Prevent rendering login form if already logged in or during loading
-  if (isSeller || loading) {
-    return <div>Loading...</div>;
-  }
+  
 
   return (
     <form onSubmit={onSubmitHandler} className="min-h-screen flex items-center text-sm text-gray-600">
