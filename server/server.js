@@ -13,24 +13,27 @@ import { stripeWebhooks } from "./controllers/orderController.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
-const port = process.env.PORT || 4000;
 
+// Connect DB & Cloudinary once on module load (top-level await allowed in ESM)
 await connectDB();
 await connectCloudinary();
 
-// MUST COME FIRST
+// Stripe webhook must accept raw body BEFORE express.json/cookieParser to preserve signature
+app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
+
+// Regular JSON middleware and cookies
 app.use(express.json());
 app.use(cookieParser());
 
+// Use FRONTEND origin from env (set FRONTEND_URL in Vercel)
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://green-cart-frontend-azure.vercel.app";
+
 app.use(
   cors({
-    origin: "https://green-cart-frontend-lilac.vercel.app",
-    credentials: true,
+    origin: FRONTEND_URL,
+    credentials: true
   })
 );
-
-// Stripe webhook AFTER middleware
-app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 
 app.get("/", (req, res) => res.send("API is Working"));
 
@@ -41,5 +44,6 @@ app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/order", orderRouter);
 
-
+// IMPORTANT: For Vercel serverless, DO NOT call app.listen(). Export the app.
+// If you later host on a VM/server, you can use app.listen(process.env.PORT || 4000).
 export default app;
