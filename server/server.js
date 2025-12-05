@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://green-cart-frontend-ten.vercel.app",
+    origin: "https://green-cart-frontend-lilac.vercel.app",
     credentials: true,
   })
 );
