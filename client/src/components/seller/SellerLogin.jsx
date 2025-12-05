@@ -7,15 +7,13 @@ const SellerLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const BACKEND_URL =import.meta.env.VITE_BACKEND_URL;
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post(`${BACKEND_URL}/api/seller/login`, {
+      const { data } = await axios.post("/api/seller/login", {
         email,
         password,
       });
-      console.log(`${BACKEND_URL}/api/seller/login`);
 
 
       if (data.success) {
