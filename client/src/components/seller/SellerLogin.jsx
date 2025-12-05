@@ -23,8 +23,7 @@ const SellerLogin = () => {
       } else {
         toast.error(data.message);
       }
-      console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
-console.log("Login URL:", `${import.meta.env.VITE_BACKEND_URL}/api/seller/login`);
+
 
     } catch (error) {
       toast.error(error.message);
