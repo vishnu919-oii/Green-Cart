@@ -17,12 +17,11 @@ const SellerLogin = () => {
       if (data.success) {
         setIsSeller(true);
         toast.success("Seller logged in!");
-        navigate("/seller"); // redirect after state is set
-      } else {
+navigate("/seller", { replace: true });      } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     } finally {
       setLoading(false);
     }

@@ -28,12 +28,12 @@ const SellerLayout = () => {
 
       if (data.success) {
         toast.success(data.message);
-        navigate("/");
+        navigate("/seller");
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+    toast.error(error.response?.data?.message || error.message);
     }
   };
 
