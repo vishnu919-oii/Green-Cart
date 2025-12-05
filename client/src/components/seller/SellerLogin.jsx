@@ -7,14 +7,16 @@ const SellerLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const BACKEND_URL =import.meta.env.VITE_BACKEND_URL;
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://green-cart-backend-phi-nine.vercel.app";
     try {
       const { data } = await axios.post(`${BACKEND_URL}/api/seller/login`, {
         email,
         password,
       });
+      console.log(`${BACKEND_URL}/api/seller/login`);
+
 
       if (data.success) {
         setIsSeller(true);
