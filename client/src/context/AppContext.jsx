@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "https://green-cart-backend-phi-nine.vercel.app/";
+axios.defaults.baseURL = "https://green-cart-backend-phi-nine.vercel.app";
 
 export const AppContext = createContext();
 
