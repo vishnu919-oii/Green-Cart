@@ -44,9 +44,13 @@ const App = () => {
           <Route
   path="/seller"
   element={
-    <SellerProtectedRoute>
+    isSeller === null ? (
+      <div>Loading...</div>
+    ) : isSeller ? (
       <SellerLayout />
-    </SellerProtectedRoute>
+    ) : (
+      <SellerLogin />
+    )
   }
 >
             <Route index element={isSeller ? <AddProduct /> : null} />
