@@ -19,10 +19,9 @@ await connectDB();
 await connectCloudinary();
 
 // 🟩 1. CORS MUST COME FIRST
-const FRONTEND_URL = process.env.FRONTEND_URL;
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: "https://green-cart-frontend-lilac.vercel.app",
     credentials: true,
   })
 );
