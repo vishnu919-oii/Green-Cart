@@ -1,6 +1,13 @@
 import jwt from "jsonwebtoken";
 
-// Login Seller: /api/seller/login
+const SELLER_COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
 export const sellerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -12,13 +19,8 @@ export const sellerLogin = async (req, res) => {
       const token = jwt.sign({ email }, process.env.JWT_SECRET, {
         expiresIn: "7d",
       });
-      res.cookie("sellerToken", token, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-        path: "/",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
+
+      res.cookie("sellerToken", token, SELLER_COOKIE_OPTIONS);
 
       return res.json({ success: true, message: "Logged In" });
     } else {
@@ -30,25 +32,13 @@ export const sellerLogin = async (req, res) => {
   }
 };
 
-// Check SellerAuth : /api/seller/is-auth
-export const isSellerAuth = async (req, res) => {
-  try {
-    return res.json({ success: true });
-  } catch (error) {
-    console.log(error.message);
-    return res.json({ success: false, message: error.message });
-  }
+export const isSellerAuth = async () => {
+  return { success: true };
 };
 
-// Logout Seller: /api/seller/logout
 export const sellerLogout = async (req, res) => {
   try {
-    res.clearCookie("sellerToken", {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      path: "/",
-    });
+    res.clearCookie("sellerToken", SELLER_COOKIE_OPTIONS);
 
     return res.json({ success: true, message: "Logged Out" });
   } catch (error) {

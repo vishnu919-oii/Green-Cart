@@ -2,7 +2,15 @@ import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-// Register User : /api/user/register
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
+// Register User
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -12,7 +20,6 @@ export const register = async (req, res) => {
     }
 
     const existingUser = await User.findOne({ email });
-
     if (existingUser)
       return res.json({ success: false, message: "User already exists" });
 
@@ -24,15 +31,7 @@ export const register = async (req, res) => {
       expiresIn: "7d",
     });
 
-   res.cookie("token", token, {
-  httpOnly: true,
-  secure: false,    // local: false
-  sameSite: "lax",  // MUST be lax for localhost
-  path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
-
-
+    res.cookie("token", token, COOKIE_OPTIONS);
 
     return res.json({
       success: true,
@@ -44,8 +43,7 @@ export const register = async (req, res) => {
   }
 };
 
-// Login User : /api/user/login
-
+// Login User
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -57,28 +55,18 @@ export const login = async (req, res) => {
       });
 
     const user = await User.findOne({ email });
-
     if (!user)
-      return res.json({ success: false, message: "Invalid email and pasword" });
+      return res.json({ success: false, message: "Invalid email or password" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-
     if (!isMatch)
-      return res.json({ success: false, message: "Invalid email and pasword" });
+      return res.json({ success: false, message: "Invalid email or password" });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
 
-    res.cookie("token", token, {
-  httpOnly: true,
-  secure: false,    // local: false
-  sameSite: "lax",  // MUST be lax for localhost
-  path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
-
-
+    res.cookie("token", token, COOKIE_OPTIONS);
 
     return res.json({
       success: true,
@@ -90,31 +78,33 @@ export const login = async (req, res) => {
   }
 };
 
-// Check Auth : /api/user/is-auth
+// Check Auth
 export const isAuth = async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");
 
     if (!user)
-      return res
-        .status(401)
-        .json({ success: false, message: "Not Authorized" });
+      return res.status(401).json({ success: false, message: "Not authorized" });
 
-    return res.json({ success: true, user: { ...user.toObject(), cartItems: user.cartItems || {} },});
+    return res.json({
+      success: true,
+      user: user,
+    });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// Logout User: /api/user/logout
+// Logout
 export const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: true,
+      sameSite: "none",
       path: "/",
     });
+
     return res.json({ success: true, message: "Logged Out" });
   } catch (error) {
     console.log(error.message);
