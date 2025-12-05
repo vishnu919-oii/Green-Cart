@@ -15,7 +15,6 @@ const SellerLogin = () => {
         password,
       });
 
-
       if (data.success) {
         setIsSeller(true);
         toast.success("Seller logged in!");
@@ -25,17 +24,12 @@ const SellerLogin = () => {
       }
 
       useEffect(() => {
-    // Check seller status from cookie/backend
-    const checkSeller = async () => {
-      await fetchSeller(); // updates isSeller
-    };
-    checkSeller();
-  }, []);
-
-  if (!isSeller) {
-    navigate("/seller/login"); // redirect if not logged in
-    return null; // don't render page until check
-  }
+        fetchSeller();
+      }, []);
+      if (!isSeller) {
+        navigate("/seller/login"); // redirect if not logged in
+        return null; // don't render page until check
+      }
     } catch (error) {
       toast.error(error.message);
     }
