@@ -11,11 +11,11 @@ const SellerLogin = () => {
     event.preventDefault();
 
     try {
-      const { data } = await axios.post(
-        "/api/seller/login",
-        { email, password },
-        { withCredentials: true }
-      );
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/seller/login`, {
+        email,
+        password,
+      });
+
       if (data.success) {
         setIsSeller(true);
         toast.success("Seller logged in!");
