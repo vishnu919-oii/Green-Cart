@@ -41,6 +41,5 @@ app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/order", orderRouter);
 
-app.listen(port, () => console.log(`Server started on PORT:${port}`));
 
 export default app;
