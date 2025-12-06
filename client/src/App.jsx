@@ -22,7 +22,7 @@ import Loading from "./components/Loading";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
-  const { isSeller, showUserLogin ,loadingSeller} = useAppContext();
+  const { isSeller, showUserLogin } = useAppContext();
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white">
       {isSellerPath ? null : <Navbar />}
@@ -42,17 +42,9 @@ const App = () => {
           <Route path="/my-orders" element={<MyOrders />} />
           <Route path="/loader" element={<Loading />} />
           <Route
-    path="/seller"
-    element={
-      loadingSeller ? (
-        <Loading />
-      ) : isSeller ? (
-        <SellerLayout />
-      ) : (
-        <SellerLogin />
-      )
-    }
-  >
+            path="/seller"
+            element={isSeller ? <SellerLayout /> : <SellerLogin />}
+          >
             <Route index element={isSeller ? <AddProduct /> : null} />
             <Route path="product-list" element={<ProductList />} />
             <Route path="orders" element={<Orders />} />
