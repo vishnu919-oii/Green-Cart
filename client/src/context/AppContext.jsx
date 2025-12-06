@@ -53,7 +53,8 @@ export const AppContextProvider = ({ children }) => {
     try {
       const { data } = await axios.get("/api/user/is-auth");
       if (data.success) {
-        setUser(data.user);
+        if(!user) setUser(data.user);
+        setShowUserLogin(false);
         setCartItems(
           typeof data.user.cartItems === "object" &&
             !Array.isArray(data.user.cartItems)
@@ -114,6 +115,7 @@ export const AppContextProvider = ({ children }) => {
     }
     return Math.floor(total * 100) / 100;
   };
+
 
   // ✅ Initial data load
   useEffect(() => {
