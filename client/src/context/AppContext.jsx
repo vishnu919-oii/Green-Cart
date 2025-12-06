@@ -63,10 +63,12 @@ export const AppContextProvider = ({ children }) => {
       } else {
         setUser(null);
         setCartItems({});
+         setShowUserLogin(true);
       }
     } catch {
       setUser(null);
       setCartItems({});
+       setShowUserLogin(true);
     }
   };
 
