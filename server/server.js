@@ -21,7 +21,7 @@ await connectCloudinary();
 // 🟩 1. CORS MUST COME FIRST
 app.use(
   cors({
-    origin: "https://green-cart-frontend-lilac.vercel.app",
+    origin: "https://green-cart-ecommerce-av.vercel.app",
     credentials: true,
   })
 );
