@@ -16,7 +16,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 );
 
 const AddAddress = () => {
-  const [address, setAddress] = useState({
+  const [addresses, setAddresses] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -31,7 +31,7 @@ const AddAddress = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setAddress((prevAddress) => ({
+    setAddresses((prevAddress) => ({
       ...prevAddress,
       [name]: value,
     }));
@@ -45,7 +45,7 @@ const AddAddress = () => {
   try {
     const { data } = await axios.post(
       "/api/address/add", // ✅ no need for full URL since baseURL is set
-      { address },
+      { ...addresses },
       { withCredentials: true }
     );
 
