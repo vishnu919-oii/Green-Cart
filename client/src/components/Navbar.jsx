@@ -14,6 +14,7 @@ const Navbar = () => {
     setSearchQuery,
     searchQuery,
     getCartCount,
+    setCartItems,
     axios,
   } = useAppContext();
   const logout = async () => {
