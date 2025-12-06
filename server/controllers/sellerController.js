@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const SELLER_COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: true,
+  secure: process.env.NODE_ENV === "production",
   sameSite: "none",
   path: "/",
   maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -39,10 +39,10 @@ export const isSellerAuth = async () => {
 export const sellerLogout = async (req, res) => {
   try {
     res.clearCookie("sellerToken", SELLER_COOKIE_OPTIONS);
-
     return res.json({ success: true, message: "Logged Out" });
   } catch (error) {
     console.log(error.message);
     return res.json({ success: false, message: error.message });
   }
 };
+

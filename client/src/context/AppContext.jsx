@@ -28,9 +28,7 @@ export const AppContextProvider = ({ children }) => {
       if (data.success) setProducts(data.products);
     } catch (error) {
       toast.error(error.message);
-    } finally {
-      setLoadingSeller(false); // done checking
-    }
+    } 
   };
 
   // ✅ Fetch Seller Status safely
@@ -45,7 +43,9 @@ export const AppContextProvider = ({ children }) => {
       }
     } catch (error) {
       setIsSeller(false);
-    }
+    }finally {
+    setLoadingSeller(false); // always mark finished
+  }
   };
 
   // ✅ Fetch User safely
