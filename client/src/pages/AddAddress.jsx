@@ -16,7 +16,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 );
 
 const AddAddress = () => {
-  const [addresses, setAddresses] = useState({
+  const [address, setAddresses] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -45,7 +45,7 @@ const AddAddress = () => {
   try {
     const { data } = await axios.post(
       "/api/address/add", // ✅ no need for full URL since baseURL is set
-      { ...addresses },
+      { ...address },
       { withCredentials: true }
     );
 
@@ -53,7 +53,7 @@ const AddAddress = () => {
       toast.success(data.message); // Fetch addresses again
       const res = await axios.get("/api/address/get", { withCredentials: true });
       if (res.data.success) {
-        setAddresses(res.data.addresses); // store in state to display
+        setAddresses(res.data.address); // store in state to display
       }
     } else {
       toast.error(data.message);
