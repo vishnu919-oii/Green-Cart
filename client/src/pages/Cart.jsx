@@ -59,8 +59,6 @@ const Cart = () => {
 
   const placeOrder = async () => {
     try {
-      if(!user)toast.success("Please login to Continue");
-      
       if (!selectedAddress) {
         return toast.error("Please select an address");
       }
