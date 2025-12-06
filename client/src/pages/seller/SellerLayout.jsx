@@ -19,7 +19,7 @@ const SellerLayout = () => {
 
   const logout = async () => {
     try {
-      const { data } = await axios.get(
+      const { data } = await axios.post(
         "/api/seller/logout",
         {
           withCredentials: true,
