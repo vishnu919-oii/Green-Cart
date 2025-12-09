@@ -8,7 +8,6 @@ const connectDB = async () => {
 
     const url = process.env.MONGODB_URL;
 
-    // If URL already contains /greencart, do NOT append again
     const finalUrl = url.includes("greencart") ? url : `${url}/greencart`;
 
     await mongoose.connect(finalUrl);

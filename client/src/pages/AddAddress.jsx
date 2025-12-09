@@ -40,33 +40,34 @@ const AddAddress = () => {
   const { axios, user, navigate } = useAppContext();
 
   const onSubmitHandler = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const { data } = await axios.post(
-      "/api/address/add", // ✅ no need for full URL since baseURL is set
-      { ...address },
-      { withCredentials: true }
-    );
+    try {
+      const { data } = await axios.post(
+        "/api/address/add", // ✅ no need for full URL since baseURL is set
+        { ...address },
+        { withCredentials: true }
+      );
 
-    if (data.success) {
-      toast.success(data.message); // Fetch addresses again
-      const res = await axios.get("/api/address/get", { withCredentials: true });
-      if (res.data.success) {
-        setAddresses(res.data.address); // store in state to display
+      if (data.success) {
+        toast.success(data.message); // Fetch addresses again
+        const res = await axios.get("/api/address/get", {
+          withCredentials: true,
+        });
+        if (res.data.success) {
+          setAddresses(res.data.address); // store in state to display
+        }
+      } else {
+        toast.error(data.message);
       }
-    } else {
-      toast.error(data.message);
+    } catch (error) {
+      if (error.response?.status === 401) {
+        toast.error("Please login to save address");
+      } else {
+        toast.error(error.message);
+      }
     }
-  } catch (error) {
-    if (error.response?.status === 401) {
-      toast.error("Please login to save address");
-    } else {
-      toast.error(error.message);
-    }
-  }
-};
-
+  };
 
   useEffect(() => {
     if (!user) {

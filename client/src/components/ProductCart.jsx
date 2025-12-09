@@ -3,13 +3,8 @@ import { assets } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 
 const ProductCart = ({ product }) => {
-  const {
-    currency,
-    addToCart,
-    removeFromCart,
-    cartItems,
-    navigate,
-  } = useAppContext();
+  const { currency, addToCart, removeFromCart, cartItems, navigate } =
+    useAppContext();
 
   // Safe category access
   const getCategorySlug = () => {

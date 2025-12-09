@@ -12,12 +12,16 @@ const SellerLogin = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post("/api/seller/login", { email, password });
+      const { data } = await axios.post("/api/seller/login", {
+        email,
+        password,
+      });
 
       if (data.success) {
         setIsSeller(true);
         toast.success("Seller logged in!");
-navigate("/seller", { replace: true });      } else {
+        navigate("/seller", { replace: true });
+      } else {
         toast.error(data.message);
       }
     } catch (error) {
@@ -26,15 +30,14 @@ navigate("/seller", { replace: true });      } else {
       setLoading(false);
     }
   };
-useEffect(() => {
-  if (isSeller) navigate("/seller", { replace: true });
-}, [isSeller]);
-;
-
-  
-
+  useEffect(() => {
+    if (isSeller) navigate("/seller", { replace: true });
+  }, [isSeller]);
   return (
-    <form onSubmit={onSubmitHandler} className="min-h-screen flex items-center text-sm text-gray-600">
+    <form
+      onSubmit={onSubmitHandler}
+      className="min-h-screen flex items-center text-sm text-gray-600"
+    >
       <div className="flex flex-col gap-5 m-auto items-start p-8 py-12 min-w-80 sm:min-w-88 rounded-lg shadow-xl border border-gray-200">
         <p className="text-2xl font-medium m-auto">
           <span className="text-primary">Seller</span> Login

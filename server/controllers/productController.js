@@ -26,8 +26,7 @@ export const addProduct = async (req, res) => {
     }
 
     // Multer Files Fix (supports images[] or single image)
-    const files =
-      req.files?.images || req.files || [];
+    const files = req.files?.images || req.files || [];
 
     if (!files || files.length === 0) {
       return res.json({ success: false, message: "No images uploaded" });

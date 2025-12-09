@@ -15,21 +15,19 @@ const ProductDetails = () => {
   const product = products.find((item) => item._id === id);
 
   useEffect(() => {
-  if (products.length > 0 && product) {
-    let mainCategory = Array.isArray(product.category)
-      ? product.category[0]
-      : product.category;
+    if (products.length > 0 && product) {
+      let mainCategory = Array.isArray(product.category)
+        ? product.category[0]
+        : product.category;
 
-    let related = products.filter(
-      (item) =>
-        Array.isArray(item.category) &&
-        item.category.includes(mainCategory)
-    );
+      let related = products.filter(
+        (item) =>
+          Array.isArray(item.category) && item.category.includes(mainCategory)
+      );
 
-    setRelatedProducts(related.slice(0, 5));
-  }
-}, [products, product]);
-
+      setRelatedProducts(related.slice(0, 5));
+    }
+  }, [products, product]);
 
   useEffect(() => {
     if (product?.image?.[0]) {
@@ -38,14 +36,13 @@ const ProductDetails = () => {
   }, [product]);
 
   // Safely retrieve category slug
- const getCategorySlug = (category) => {
-  if (Array.isArray(category) && category.length > 0) {
-    return category[0].toLowerCase();
-  }
-  if (typeof category === "string") return category.toLowerCase();
-  return "unknown";
-};
-
+  const getCategorySlug = (category) => {
+    if (Array.isArray(category) && category.length > 0) {
+      return category[0].toLowerCase();
+    }
+    if (typeof category === "string") return category.toLowerCase();
+    return "unknown";
+  };
 
   if (!product) return <p>Loading...</p>; // Handle loading or missing product
 
@@ -54,8 +51,9 @@ const ProductDetails = () => {
       <p>
         <Link to="/">Home</Link> /<Link to="/products">Products</Link> /
         <Link to={`/products/${getCategorySlug(product.category)}`}>
-          {Array.isArray(product.category) ? product.category[0] : product.category}
-
+          {Array.isArray(product.category)
+            ? product.category[0]
+            : product.category}
         </Link>{" "}
         /<span className="text-primary"> {product.name}</span>
       </p>

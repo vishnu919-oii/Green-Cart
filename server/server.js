@@ -18,7 +18,7 @@ const app = express();
 await connectDB();
 await connectCloudinary();
 
-// 🟩 1. CORS MUST COME FIRST
+//  1. CORS MUST COME FIRST
 app.use(
   cors({
     origin: "https://green-cart-ecommerce-av.vercel.app",
@@ -26,17 +26,17 @@ app.use(
   })
 );
 
-// 🟩 2. Stripe raw webhook (must be before JSON parser)
+// 2. Stripe raw webhook (must be before JSON parser)
 app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 
-// 🟩 3. Normal middleware
+//  3. Normal middleware
 app.use(express.json());
 app.use(cookieParser());
 
-// 🟩 4. Test API
+//  4. Test API
 app.get("/", (req, res) => res.send("API is Working"));
 
-// 🟩 5. Routers
+//  5. Routers
 app.use("/api/user", userRouter);
 app.use("/api/seller", sellerRouter);
 app.use("/api/product", productRouter);
@@ -44,5 +44,5 @@ app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/order", orderRouter);
 
-// 🟩 6. Export for Vercel
+//  6. Export for Vercel
 export default app;

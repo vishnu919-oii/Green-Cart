@@ -20,7 +20,7 @@ const Cart = () => {
   } = useAppContext();
 
   const [cartArray, setCartArray] = useState([]);
-  const [addresses, setAddresses] = useState([]); 
+  const [addresses, setAddresses] = useState([]);
   const [showAddress, setShowAddress] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentOption, setPaymentOption] = useState("COD");
@@ -78,7 +78,7 @@ const Cart = () => {
           setCartItems({});
           navigate("/my-orders");
         } else {
-          toast.error(data.message); 
+          toast.error(data.message);
         }
       } else {
         // Place Order with Stripe
@@ -94,11 +94,11 @@ const Cart = () => {
           window.location.replace(data.url);
           navigate("/my-orders");
         } else {
-          toast.error(data.message); 
+          toast.error(data.message);
         }
       }
     } catch (error) {
-      toast.error(error.message); 
+      toast.error(error.message);
     }
   };
 

@@ -19,12 +19,9 @@ const SellerLayout = () => {
 
   const logout = async () => {
     try {
-      const { data } = await axios.post(
-        "/api/seller/logout",
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await axios.post("/api/seller/logout", {
+        withCredentials: true,
+      });
 
       if (data.success) {
         toast.success(data.message);
@@ -33,7 +30,7 @@ const SellerLayout = () => {
         toast.error(data.message);
       }
     } catch (error) {
-    toast.error(error.response?.data?.message || error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 

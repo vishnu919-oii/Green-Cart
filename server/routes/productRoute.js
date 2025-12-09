@@ -12,7 +12,7 @@ const productRouter = express.Router();
 
 productRouter.post("/add", authSeller, upload.array("images", 4), addProduct);
 productRouter.get("/list", productList);
-productRouter.get("/id/:id", productById);      // ✔ FIXED (GET + params)
+productRouter.get("/id/:id", productById);    
 productRouter.post("/stock", authSeller, changeStock);
 
 export default productRouter;
