@@ -12,15 +12,15 @@ const ProductCart = ({ product }) => {
 
   if (!cat) return "unknown";
 
-  // // If category is array → take first item
-  // if (Array.isArray(cat) && cat.length > 0) {
-  //   return cat[0].toLowerCase().replace(/\s+/g, "-");
-  // }
+  // If category is array → take first item
+  if (Array.isArray(cat) && cat.length > 0) {
+    return cat[0].toLowerCase().replace(/\s+/g, "-");
+  }
 
-  // // If category is string
-  // if (typeof cat === "string") {
-  //   return cat.toLowerCase().replace(/\s+/g, "-");
-  // }
+  // If category is string
+  if (typeof cat === "string") {
+    return cat.toLowerCase().replace(/\s+/g, "-");
+  }
 
   return "unknown";
 };
