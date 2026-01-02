@@ -8,25 +8,23 @@ const ProductCart = ({ product }) => {
 
   // Safe category access
  const getCategorySlug = () => {
-  if (!product?.category) return "unknown";
+  const cat = product?.category;
 
-  // If category is populated object
-  if (typeof product.category === "object") {
-    return (
-      product.category.slug ||
-      product.category.name ||
-      product.category.title ||
-      "unknown"
-    ).toLowerCase();
+  if (!cat) return "unknown";
+
+  // If category is array → take first item
+  if (Array.isArray(cat) && cat.length > 0) {
+    return cat[0].toLowerCase().replace(/\s+/g, "-");
   }
 
   // If category is string
-  if (typeof product.category === "string") {
-    return product.category.toLowerCase();
+  if (typeof cat === "string") {
+    return cat.toLowerCase().replace(/\s+/g, "-");
   }
 
   return "unknown";
 };
+
 
 
   return (
