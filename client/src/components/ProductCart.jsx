@@ -7,15 +7,27 @@ const ProductCart = ({ product }) => {
     useAppContext();
 
   // Safe category access
-  const getCategorySlug = () => {
-    if (typeof product.category === "string") {
-      return product.category.toLowerCase();
-    } else if (typeof product.category === "object" && product.category?.name) {
-      return product.category.name.toLowerCase();
-    } else {
-      return "unknown";
-    }
-  };
+ const getCategorySlug = () => {
+  if (!product?.category) return "unknown";
+
+  // If category is populated object
+  if (typeof product.category === "object") {
+    return (
+      product.category.slug ||
+      product.category.name ||
+      product.category.title ||
+      "unknown"
+    ).toLowerCase();
+  }
+
+  // If category is string
+  if (typeof product.category === "string") {
+    return product.category.toLowerCase();
+  }
+
+  return "unknown";
+};
+
 
   return (
     product && (

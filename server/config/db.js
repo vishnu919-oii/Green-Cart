@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    mongoose.connection.on("connected", () => 
+    mongoose.connection.on("connected", () =>
       console.log("Database Connected")
     );
 
@@ -11,7 +11,6 @@ const connectDB = async () => {
     const finalUrl = url.includes("greencart") ? url : `${url}/greencart`;
 
     await mongoose.connect(finalUrl);
-
   } catch (error) {
     console.error("MongoDB Error:", error.message);
   }
